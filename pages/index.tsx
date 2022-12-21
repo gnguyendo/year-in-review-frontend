@@ -15,35 +15,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <h1>Deployed with Git Integrations</h1>
-            <h2>League Year in Review</h2>
-          </div>
-        </div>
 
         <div className={styles.center}>
           <Image
             className={styles.logo}
             src="/next.svg"
-            alt="Next.js Logo"
+            alt="Deployed with Git Integrations"
             width={180}
             height={37}
             priority
           />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
+          <h1>League Year In Review</h1>
         </div>
 
         <div className={styles.grid}>
