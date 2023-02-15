@@ -19,7 +19,7 @@ type RankQueue = {
     leaguePoints: string,
 }
 
-function userProfile(summnoner: string) {
+function UserProfile(summnoner: string) {
 
     const [data, setData] = useState <Profile>()
     const [isLoading, setLoading] = useState(false)
@@ -64,4 +64,4 @@ function userProfile(summnoner: string) {
 }
 
 
-export default userProfile;
+export default UserProfile;
