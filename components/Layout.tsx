@@ -1,27 +1,17 @@
-
-import { Component, ReactNode } from "react";
-import { AppProps } from "next/app";
+import { ReactNode } from "react";
 import Navbar from "./Navbar";
 
+interface GlobalLayOut {
+    children: ReactNode;
+}
 
-function Layout({ Component, ...pageProps }: AppProps) {
+const Layout = ({children}: GlobalLayOut) => {
     return (
         <div className='content'>
             <Navbar />
-                <Component {...pageProps}/>
+            <main>{children}</main>
         </div>
     );
 }
-
-
-// const Layout = ({ children }) => {
-//     return (
-//         <div className='content'>
-//             <Navbar />
-//             {children}
-//             <Navbar />
-//         </div>
-//     );
-// }
 
 export default Layout;
