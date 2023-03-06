@@ -8,7 +8,7 @@ export default function SearchBar() {
     const router = useRouter();
 
     const searchForSummoner = async (summonerName: string): Promise<IProfile[]> => {
-        // console.log("Summoner name is: " + summonerName)
+        console.log("Summoner name is: " + summonerName)
         const result = await fetch(`https://year-in-review.onrender.com/${summonerName}`);
         return (await result.json()).results;
     }
@@ -27,7 +27,8 @@ export default function SearchBar() {
                 const response = await searchForSummoner(summonerName);
                 setSummonerFound(response);
                 router.push({
-                    pathname: "/" + summonerName
+                    pathname: '/' + summonerName
+                    // query: {id: summonerName}
                 })
             }
         })();
