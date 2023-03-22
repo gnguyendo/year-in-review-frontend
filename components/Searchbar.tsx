@@ -5,14 +5,57 @@ import * as React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {styled} from "@mui/material/styles"
+import { styled, alpha } from "@mui/material/styles";
+import InputBase from '@mui/material/InputBase';
+
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: '20ch',
+            '&:focus': {
+                width: '30ch',
+            },
+        },
+    },
+}));
 
 export default function SearchBar() {
     const [summonerSearch, setSummonerSearch] = useState('');
     const [summonerFound, setSummonerFound] = useState<IProfile[]>([]);
     const [summoner, setSummoner] = useState('');
     const router = useRouter();
-    
+
 
     const searchForSummoner = async (summonerName: string): Promise<IProfile[]> => {
         // console.log("Summoner name is: " + summonerName)
@@ -44,23 +87,16 @@ export default function SearchBar() {
     return (
         <div>
             <form onSubmit={event => handleSubmit(event)}>
-                <TextField
-                    label="Summoner Name"
-                    variant="outlined"
-                    // className={classes.txtField}
-                    id="filled-hidden-label-small"
-                    onChange={(e) => setSummoner(e.target.value)}
-                    size="small"
-                    sx={{input: {color: 'white'}}}
-                />
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    endIcon={<SearchIcon />}
-                >
-                    Search
-                </Button>
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                        placeholder="Summoner"
+                        inputProps={{ 'aria-label': 'search' }}
+                        onChange={(e) => setSummoner(e.target.value)}
+                    />
+                </Search>
             </form>
 
         </div>

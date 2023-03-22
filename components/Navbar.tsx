@@ -8,10 +8,10 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import HomeIcon from '@mui/icons-material/Home';
 
-export default function SearchAppBar() {
+export default function Navbar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1}} >
+      <AppBar position="static" sx={{opacity:".7"}}>
         <Toolbar>
           <IconButton
             size="large"
@@ -20,10 +20,11 @@ export default function SearchAppBar() {
             aria-label="open drawer"
             sx={{ mr: 2 }}
           >
-            <Link href="/"><HomeIcon /></Link>
+            <Link href="/"><HomeIcon sx={{ color: 'white' }}/>
+            </Link>
           </IconButton>
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}

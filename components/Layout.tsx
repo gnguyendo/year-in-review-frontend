@@ -1,16 +1,41 @@
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css"
+import Viego from '../public/Viego.jpg'
 
 interface GlobalLayOut {
     children: ReactNode;
 }
 
-const Layout = ({children}: GlobalLayOut) => {
+const Layout = ({ children }: GlobalLayOut) => {
     return (
-        <div className='content'>
-            <Navbar />
-            <main>{children}</main>
-        </div>
+        <>
+            <Head>
+                <title>League Year In Review</title>
+            </Head>
+            <div className={styles.bgWrap}>
+                <Image
+                    alt="Viego"
+                    src={Viego}
+                    placeholder="blur"
+                    quality={100}
+                    fill
+                    sizes="100vw"
+                    style={{
+                        objectFit: 'cover',
+                        opacity: 0.77
+                    }}
+                />
+            </div>
+            <main className={styles.bgText}>
+                <Navbar />
+                {children}
+            </main>
+
+        </>
+
     );
 }
 

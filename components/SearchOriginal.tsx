@@ -9,7 +9,7 @@ export default function SearchBarOriginal() {
     const router = useRouter();
 
     const searchForSummoner = async (summonerName: string): Promise<IProfile[]> => {
-        console.log("Summoner name is: " + summonerName)
+        // console.log("Summoner name is: " + summonerName)
         const result = await fetch(`https://year-in-review.onrender.com/${summonerName}`);
         return (await result.json()).results;
     }
@@ -25,12 +25,12 @@ export default function SearchBarOriginal() {
     useEffect(() => {
         (async () => {
             const summonerName = encodeURIComponent(summonerSearch);
+            // console.log("Summoner name is: " + summonerName)
             if (summonerName) {
                 const response = await searchForSummoner(summonerName);
                 setSummonerFound(response);
                 router.push({
                     pathname: '/' + summonerName
-                    // query: {id: summonerName}
                 })
             }
         })();
@@ -48,15 +48,3 @@ export default function SearchBarOriginal() {
 
     )
 }
-
-
-
-        //   <Search>
-        //     <SearchIconWrapper>
-        //       <SearchIcon />
-        //     </SearchIconWrapper>
-        //     <StyledInputBase
-        //       placeholder="Summoner"
-        //       inputProps={{ 'aria-label': 'search' }}
-        //     />
-        //   </Search>
