@@ -4,14 +4,19 @@ import { IProfile } from '../IProfile';
 import useSWR from 'swr'
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import { color, styled, typography } from '@mui/system';
 import Image from 'next/image';
-import rankImages from '../Images';
+import rankImages from '../RankImages';
+import ProfileIcons from "../ProfileIcons"
+import SplitButton from '../components/SplitButton';
+import { Rectangle } from '@mui/icons-material';
 
 const theme = createTheme({
     typography: {
         h4: {
+            fontWeight: 'bold',
+        },
+        h3: {
             fontWeight: 'bold'
         },
         body1: {
@@ -20,6 +25,9 @@ const theme = createTheme({
     }
 })
 
+const rankImageContainer = {
+    position: 'relative'
+}
 
 // Original code
 function UserProfile() {
@@ -50,19 +58,9 @@ function UserProfile() {
     }, [router.isReady]);
 
     if (isLoading)
-        return
-    <Typography
-        variant='h3'
-    >
-        No Profile Data
-    </Typography>
+        return <Typography variant='h3' sx={{ color: 'white' }}> Loading </Typography>
     if (!data)
-        return
-    <Typography
-        variant='h3'
-    >
-        No Profile Data
-    </Typography>
+        return <p>No Profile Data</p>
 
     return (
         <Box
@@ -70,8 +68,8 @@ function UserProfile() {
                 margin: 5,
                 width: '80%',
                 display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
+                flexWrap: 'wrap',
+                flexDirection: 'row',
                 mx: '10%',
                 border: 1,
                 color: '#eceff1',
@@ -79,67 +77,92 @@ function UserProfile() {
             }}
         >
             <ThemeProvider theme={theme}>
-                <Typography
-                    variant="h4"
-                >
-                    {data.summonerName}
-                </Typography>
+                <Box display='flex'>
+                    <div style={{ position: 'relative', borderRadius: '50%', overflow: 'hidden', height: 120, width: 120 }}>
+                        <Image
+                            alt="profileIcon"
+                            src={ProfileIcons.Twenty28}
+                            object-fit="contain"
+                            sizes='100vw'
+                            fill
+                            style={{ objectFit: 'contain' }}
+                        />
+                    </div>
 
-                <Typography
-                    variant='body1'
-                >
-                    Level: {data.summonerLevel}
-                </Typography>
-                <Typography>
-                    Ranked Solo Career
-                </Typography>
-                {soloQ ?
-                    <Typography
-                    >
-                        {data.RANKED_SOLO_5x5.tier} {data.RANKED_SOLO_5x5.rank}
+                    <Box sx={{ marginLeft: '10px' }}>
+                        <Typography
+                            variant="h3"
+                        >
+                            {data.summonerName}
+                        </Typography>
+                        <Typography
+                            variant='body2'
+                            fontStyle={'oblique'}
+                        >
+                            Level: {data.summonerLevel}
+                        </Typography>
+                        <SplitButton />
+                    </Box>
+                </Box>
+                <Box sx={{ width: '100%', display: 'flex' }}>
+                    <Box width={'25%'}>
+                        <Typography>
+                            Ranked Solo / Duo Career
+                        </Typography>
+                        {soloQ ?
+                            <Typography
+                            >
+                                <div style={{width: 150, height: 150, overflow: 'hidden'}}>
+                                    <Image
+                                        alt="Bronze"
+                                        src={rankImages.Bronze}
+                                        // width={100}
+                                        // height={100}
+                                        style={{ position: 'absolute', top: 500, left: 500, objectFit: 'contain' }}
+                                    />
+                                </div>
 
-                        <br />
-                        Solo/Duo Rank:
-                        {/* <Image
-                        alt="Bronze"
-                        src={rankImages.Bronze}
-                    /> */}
-                    </Typography>
-                    : //Conditional if no Solo RANK
-                    <Typography variant='body1'>Unranked</Typography>}
-                {soloQ ?
-                    <Typography
-                        variant='body1'
-                    >
-                        Wins: {data.RANKED_SOLO_5x5.wins} Losses: {data.RANKED_SOLO_5x5.losses}
-                        <br />
-                        LP: {data.RANKED_SOLO_5x5.leaguePoints}
-                    </Typography> : null
-                }
-                <Typography>
-                    Ranked Flex Career
-                </Typography>
-                {flexQ ?
-                    <Typography>
-                        Flex Rank: {data.RANKED_FLEX_SR.tier} {data.RANKED_FLEX_SR.rank}
-                    </Typography>
-                    : // Conditional if no Flex RANK
-                    <Typography variant='body1'>Unranked</Typography>}
-                {flexQ ?
-                    <Typography
-                        variant='body1'
-                    >
-                        Wins: {data.RANKED_FLEX_SR.wins} Losses: {data.RANKED_FLEX_SR.losses}
-                        <br />
-                        LP: {data.RANKED_FLEX_SR.leaguePoints}
-                    </Typography> : null
-                }
+                                {data.RANKED_SOLO_5x5.tier} {data.RANKED_SOLO_5x5.rank}
+
+                            </Typography>
+                            : <Typography variant='body1'>Unranked</Typography>} {/*Conditional Renders Unranked */
+                        }
+                        {soloQ ?
+                            <Typography
+                                variant='body1'
+                            >
+                                Wins: {data.RANKED_SOLO_5x5.wins} Losses: {data.RANKED_SOLO_5x5.losses}
+                                <br />
+                                LP: {data.RANKED_SOLO_5x5.leaguePoints}
+                            </Typography> : null // Conditional renders nothing
+                        }
+                    </Box>
+                    <Box width={'25%'}>
+                        <Typography>
+                            Ranked Flex Career
+                        </Typography>
+                        {flexQ ?
+                            <Typography>
+                                Rank: {data.RANKED_FLEX_SR.tier} {data.RANKED_FLEX_SR.rank}
+                            </Typography>
+                            : <Typography variant='body1'>Unranked</Typography>} {/*Conditional Renders Unranked */}
+                        {flexQ ?
+                            <Typography
+                                variant='body1'
+                            >
+                                Wins: {data.RANKED_FLEX_SR.wins} Losses: {data.RANKED_FLEX_SR.losses}
+                                <br />
+                                LP: {data.RANKED_FLEX_SR.leaguePoints}
+                            </Typography> : null // Conditional renders nothing
+                        }
+                    </Box>
+                </Box>
             </ThemeProvider>
-
         </Box>
     )
 }
 
+// Code using SWR
 // const router = useRouter();
 
 // const fetcherWithID = async (name: string) => {

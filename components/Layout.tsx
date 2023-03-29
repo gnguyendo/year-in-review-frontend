@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css"
 import Viego from '../public/Viego.jpg'
+import Ahri from "../public/Ahri.jpg"
 
 interface GlobalLayOut {
     children: ReactNode;

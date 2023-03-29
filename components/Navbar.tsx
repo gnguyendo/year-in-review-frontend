@@ -24,10 +24,10 @@ export default function Navbar() {
             </Link>
           </IconButton>
           <Typography
-            variant="h5"
+            variant="h4"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', fontWeight: 'bold' } }}
           >
             League Season Review
           </Typography>

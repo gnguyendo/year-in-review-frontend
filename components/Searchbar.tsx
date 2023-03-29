@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import { IProfile } from '../IProfile';
 import * as React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from '@mui/material/InputBase';
 
@@ -58,7 +56,6 @@ export default function SearchBar() {
 
 
     const searchForSummoner = async (summonerName: string): Promise<IProfile[]> => {
-        // console.log("Summoner name is: " + summonerName)
         const result = await fetch(`https://year-in-review.onrender.com/${summonerName}`);
         return (await result.json()).results;
     }
