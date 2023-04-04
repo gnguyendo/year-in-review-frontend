@@ -4,12 +4,11 @@ import { IProfile } from '../IProfile';
 import useSWR from 'swr'
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, Typography } from '@mui/material';
-import { color, styled, typography } from '@mui/system';
 import Image from 'next/image';
 import rankImages from '../RankImages';
 import ProfileIcons from "../ProfileIcons"
-import SplitButton from '../components/SplitButton';
-import { Rectangle } from '@mui/icons-material';
+import SplitButton from '../components/QueueButton';
+import RankImage from '../components/RankImage';
 
 const theme = createTheme({
     typography: {
@@ -19,15 +18,18 @@ const theme = createTheme({
         h3: {
             fontWeight: 'bold'
         },
+        h5: {
+            fontWeight: 'bold'
+        },
         body1: {
             fontWeight: 'bold'
         }
     }
 })
 
-const rankImageContainer = {
-    position: 'relative'
-}
+
+// const allRanks = ["CHALLENGER", "GRANDMASTER","MASTER", "DIAMOND", "PLATINUM", "GOLD", "SILVER", "BRONZE", "IRON"]
+const allRanks = ['Challenger', 'Grandmaster', 'Master', 'Diamond', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Iron']
 
 // Original code
 function UserProfile() {
@@ -36,6 +38,19 @@ function UserProfile() {
     const [isLoading, setLoading] = useState(false)
     const [soloQ, hasSoloQ] = useState(false);
     const [flexQ, hasFlexQ] = useState(false);
+    const [soloImgRank, setSoloImgRank] = useState('');
+    const [flexImgRank, setFlexImgRank] = useState('');
+
+    function findImgRank(currRank: IProfile) {
+        for (let rank of allRanks) {
+            let rankUpperCase = JSON.stringify(rank.toUpperCase())
+            const currentRank = JSON.stringify(currRank)
+            if (currentRank == rankUpperCase) {
+                return rank
+            }
+        }
+        return null
+    }
 
     useEffect(() => {
         if (router.isReady) {
@@ -49,10 +64,14 @@ function UserProfile() {
                     setLoading(false);
                     if (data.RANKED_FLEX_SR) {
                         hasFlexQ(true);
+                        // console.log(findImgRank(data.RANKED_FLEX_SR.tier))
+
                     }
                     if (data.RANKED_SOLO_5x5) {
                         hasSoloQ(true);
+                        // findImgRank(data.RANKED_SOLO_5x5.tier)
                     }
+
                 });
         }
     }, [router.isReady]);
@@ -71,7 +90,6 @@ function UserProfile() {
                 flexWrap: 'wrap',
                 flexDirection: 'row',
                 mx: '10%',
-                border: 1,
                 color: '#eceff1',
                 fontWeight: 'bold',
             }}
@@ -88,7 +106,6 @@ function UserProfile() {
                             style={{ objectFit: 'contain' }}
                         />
                     </div>
-
                     <Box sx={{ marginLeft: '10px' }}>
                         <Typography
                             variant="h3"
@@ -101,61 +118,71 @@ function UserProfile() {
                         >
                             Level: {data.summonerLevel}
                         </Typography>
-                        <SplitButton />
+                        {/* <SplitButton /> */}
                     </Box>
                 </Box>
                 <Box sx={{ width: '100%', display: 'flex' }}>
-                    <Box width={'25%'}>
-                        <Typography>
-                            Ranked Solo / Duo Career
-                        </Typography>
-                        {soloQ ?
-                            <Typography
-                            >
-                                <div style={{width: 150, height: 150, overflow: 'hidden'}}>
-                                    <Image
-                                        alt="Bronze"
-                                        src={rankImages.Bronze}
-                                        // width={100}
-                                        // height={100}
-                                        style={{ position: 'absolute', top: 500, left: 500, objectFit: 'contain' }}
-                                    />
-                                </div>
+                    {soloQ ?
+                        <Box sx={{ marginTop: '15px', width: '50%' }}>
+                            <Box style={{ display: 'flex' }}>
+                                <RankImage tier={data.RANKED_SOLO_5x5.tier}/>
+                                <Box sx={{ display: 'flex', minwidth: '100%', height: '100%' }}>
+                                    <Typography sx={{ marginTop: '10px', marginLeft: '10px' }} variant='h5'>
+                                        {data.RANKED_SOLO_5x5.tier} {data.RANKED_SOLO_5x5.rank}
+                                    </Typography>
+                                    <Typography sx={{ marginTop: '10px', marginLeft: '10px', paddingTop: '3px' }}>
+                                        LP: {data.RANKED_SOLO_5x5.leaguePoints}
+                                    </Typography>
+                                </Box>
 
-                                {data.RANKED_SOLO_5x5.tier} {data.RANKED_SOLO_5x5.rank}
+                            </Box>
+                            <Box sx={{ display: 'flex', backgroundColor: '#78909c', width: '225px', marginLeft: '15px', borderRadius: '15px', paddingTop: '5px' }}>
+                                <Typography sx={{ marginLeft: '10px', display: 'flex' }} variant='h6'>
+                                    WINS
+                                </Typography>
+                                <Typography variant='h6' sx={{ marginLeft: '5px', color: '#1b5e20' }}>
+                                    {data.RANKED_SOLO_5x5.wins}
+                                </Typography>
+                                <Typography variant='h6' sx={{ marginLeft: '10px' }}>
+                                    LOSSES:
+                                </Typography>
+                                <Typography variant='h6' sx={{ marginLeft: '5px', color: '#ff1744' }}>
+                                    {data.RANKED_SOLO_5x5.losses}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        : <Typography variant='body1'>Unranked</Typography>} {/*Conditional Renders Unranked */}
 
-                            </Typography>
-                            : <Typography variant='body1'>Unranked</Typography>} {/*Conditional Renders Unranked */
-                        }
-                        {soloQ ?
-                            <Typography
-                                variant='body1'
-                            >
-                                Wins: {data.RANKED_SOLO_5x5.wins} Losses: {data.RANKED_SOLO_5x5.losses}
-                                <br />
-                                LP: {data.RANKED_SOLO_5x5.leaguePoints}
-                            </Typography> : null // Conditional renders nothing
-                        }
-                    </Box>
-                    <Box width={'25%'}>
-                        <Typography>
-                            Ranked Flex Career
-                        </Typography>
-                        {flexQ ?
-                            <Typography>
-                                Rank: {data.RANKED_FLEX_SR.tier} {data.RANKED_FLEX_SR.rank}
-                            </Typography>
-                            : <Typography variant='body1'>Unranked</Typography>} {/*Conditional Renders Unranked */}
-                        {flexQ ?
-                            <Typography
-                                variant='body1'
-                            >
-                                Wins: {data.RANKED_FLEX_SR.wins} Losses: {data.RANKED_FLEX_SR.losses}
-                                <br />
-                                LP: {data.RANKED_FLEX_SR.leaguePoints}
-                            </Typography> : null // Conditional renders nothing
-                        }
-                    </Box>
+                    {flexQ ?
+                        <Box sx={{ marginTop: '15px', width: '50%' }}>
+                            <Box style={{ display: 'flex' }}>
+                                <RankImage tier={data.RANKED_FLEX_SR.tier}/>
+                                <Box sx={{ display: 'flex', minwidth: '100%', height: '100%' }}>
+                                    <Typography sx={{ marginTop: '10px', marginLeft: '10px' }} variant='h5'>
+                                        {data.RANKED_FLEX_SR.tier} {data.RANKED_FLEX_SR.rank}
+                                    </Typography>
+                                    <Typography sx={{ marginTop: '10px', marginLeft: '10px', paddingTop: '3px' }}>
+                                        LP: {data.RANKED_FLEX_SR.leaguePoints}
+                                    </Typography>
+                                </Box>
+
+                            </Box>
+                            <Box sx={{ display: 'flex', backgroundColor: '#78909c', width: '225px', marginLeft: '15px', borderRadius: '15px', paddingTop: '5px' }}>
+                                <Typography sx={{ marginLeft: '10px', display: 'flex' }} variant='h6'>
+                                    WINS
+                                </Typography>
+                                <Typography variant='h6' sx={{ marginLeft: '5px', color: '#1b5e20' }}>
+                                    {data.RANKED_FLEX_SR.wins}
+                                </Typography>
+                                <Typography variant='h6' sx={{ marginLeft: '10px' }}>
+                                    LOSSES:
+                                </Typography>
+                                <Typography variant='h6' sx={{ marginLeft: '5px', color: '#ff1744' }}>
+                                    {data.RANKED_FLEX_SR.losses}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        : <Typography variant='body1'>Unranked</Typography>} {/*Conditional Renders Unranked */}
                 </Box>
             </ThemeProvider>
         </Box>

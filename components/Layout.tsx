@@ -26,7 +26,7 @@ const Layout = ({ children }: GlobalLayOut) => {
                     sizes="100vw"
                     style={{
                         objectFit: 'cover',
-                        opacity: 0.77
+                        opacity: 0.75
                     }}
                 />
             </div>

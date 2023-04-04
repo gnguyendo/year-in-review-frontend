@@ -11,7 +11,7 @@
 //   export default allProfileIcons;
 
 
-import Twenty28 from '/public/profileicon/28.png';
+import Twenty28 from '/public/profileicons/28.png';
 
 const allProfileIcons = {
     Twenty28
