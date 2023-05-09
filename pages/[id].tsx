@@ -38,8 +38,6 @@ function UserProfile() {
     const [isLoading, setLoading] = useState(false)
     const [soloQ, hasSoloQ] = useState(false);
     const [flexQ, hasFlexQ] = useState(false);
-    const [soloImgRank, setSoloImgRank] = useState('');
-    const [flexImgRank, setFlexImgRank] = useState('');
 
     function findImgRank(currRank: IProfile) {
         for (let rank of allRanks) {
