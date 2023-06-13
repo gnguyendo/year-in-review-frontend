@@ -28,6 +28,8 @@ const theme = createTheme({
 })
 
 
+
+
 // const allRanks = ["CHALLENGER", "GRANDMASTER","MASTER", "DIAMOND", "PLATINUM", "GOLD", "SILVER", "BRONZE", "IRON"]
 const allRanks = ['Challenger', 'Grandmaster', 'Master', 'Diamond', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Iron']
 
@@ -38,6 +40,7 @@ function UserProfile() {
     const [isLoading, setLoading] = useState(false)
     const [soloQ, hasSoloQ] = useState(false);
     const [flexQ, hasFlexQ] = useState(false);
+    const [summoner, setSummoner] = useState('');
 
     function findImgRank(currRank: IProfile) {
         for (let rank of allRanks) {
@@ -50,26 +53,51 @@ function UserProfile() {
         return null
     }
 
+    const searchForSummoner = async (summonerName: string): Promise<object> => {
+        const result = await fetch(`https://year-in-review.onrender.com/validsummoner/${summonerName}`);
+        return await result.json()
+    }
+
     useEffect(() => {
+        // (async () => {
+        //     if (router.isReady) {
+        //         const theName = router.query.id
+        //         const summonerName = encodeURIComponent(theName);
+        //         if (summonerName) {
+        //             const response = await searchForSummoner(summonerName);
+        //             if (response) {
+        //                 router.push({ 
+        //                     pathname: '/' + summonerName    
+        //                 })
+        //             } 
+        //             else {
+        //                 router.push('/404')  
+        //             }
+        //         }
+        //     }
+        // })();
+
+
         if (router.isReady) {
-            const name = router.query.id
-            setLoading(true)
+            const name = router.query.id;
+            console.log(typeof(name));
+
+            setLoading(true);
+
+
             fetch(`https://year-in-review.onrender.com/${name}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    // console.log(data);
                     setData(data);
                     setLoading(false);
                     if (data.RANKED_FLEX_SR) {
                         hasFlexQ(true);
                         // console.log(findImgRank(data.RANKED_FLEX_SR.tier))
-
                     }
                     if (data.RANKED_SOLO_5x5) {
                         hasSoloQ(true);
                         // findImgRank(data.RANKED_SOLO_5x5.tier)
                     }
-
                 });
         }
     }, [router.isReady]);
@@ -123,7 +151,7 @@ function UserProfile() {
                     {soloQ ?
                         <Box sx={{ marginTop: '15px', width: '50%' }}>
                             <Box style={{ display: 'flex' }}>
-                                <RankImage tier={data.RANKED_SOLO_5x5.tier}/>
+                                <RankImage tier={data.RANKED_SOLO_5x5.tier} />
                                 <Box sx={{ display: 'flex', minwidth: '100%', height: '100%' }}>
                                     <Typography sx={{ marginTop: '10px', marginLeft: '10px' }} variant='h5'>
                                         {data.RANKED_SOLO_5x5.tier} {data.RANKED_SOLO_5x5.rank}
@@ -154,7 +182,7 @@ function UserProfile() {
                     {flexQ ?
                         <Box sx={{ marginTop: '15px', width: '50%' }}>
                             <Box style={{ display: 'flex' }}>
-                                <RankImage tier={data.RANKED_FLEX_SR.tier}/>
+                                <RankImage tier={data.RANKED_FLEX_SR.tier} />
                                 <Box sx={{ display: 'flex', minwidth: '100%', height: '100%' }}>
                                     <Typography sx={{ marginTop: '10px', marginLeft: '10px' }} variant='h5'>
                                         {data.RANKED_FLEX_SR.tier} {data.RANKED_FLEX_SR.rank}

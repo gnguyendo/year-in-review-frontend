@@ -25,11 +25,9 @@ export default function SearchBarHome() {
     const [summoner, setSummoner] = useState('');
     const router = useRouter();
 
-
-    const searchForSummoner = async (summonerName: string): Promise<IProfile[]> => {
-        // console.log("Summoner name is: " + summonerName)
-        const result = await fetch(`https://year-in-review.onrender.com/${summonerName}`);
-        return (await result.json()).results;
+    const searchForSummoner = async (summonerName: string): Promise<object> => {
+        const result = await fetch(`https://year-in-review.onrender.com/validsummoner/${summonerName}`);
+        return await result.json()
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -43,10 +41,14 @@ export default function SearchBarHome() {
             const summonerName = encodeURIComponent(summoner);
             if (summonerName) {
                 const response = await searchForSummoner(summonerName);
-                setSummonerFound(response);
-                router.push({
-                    pathname: '/' + summonerName
-                })
+                if (response) {
+                    router.push({ 
+                        pathname: '/' + summonerName    
+                    })
+                } 
+                else {
+                    router.push('/404')
+                }
             }
         })();
     }, [summonerSearch])

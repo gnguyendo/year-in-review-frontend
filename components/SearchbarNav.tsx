@@ -54,24 +54,9 @@ export default function SearchBar() {
     const [summoner, setSummoner] = useState('');
     const router = useRouter();
 
-
-    const searchForSummoner = async (summonerName: string): Promise<IProfile[]> => {
-        // OG Code
-        // const result = await fetch(`https://year-in-review.onrender.com/${summonerName}`);
-        // return (await result.json()).results;
-
-        const result = await fetch(`https://year-in-review.onrender.com/validsummoner/${summonerName}`);
-        return (await result.json());
-    }
-
-    const searchForSummoner2 = async (summonerName: string): Promise<object> => {
-        // OG Code
-        // const result = await fetch(`https://year-in-review.onrender.com/${summonerName}`);
-        // return (await result.json()).results;
-
+    const searchForSummoner = async (summonerName: string): Promise<object> => {
         const result = await fetch(`https://year-in-review.onrender.com/validsummoner/${summonerName}`);
         return await result.json()
-        // return (await result.json())
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -82,21 +67,9 @@ export default function SearchBar() {
 
     useEffect(() => {
         (async () => {
-
-            //OG Code
-            // const summonerName = encodeURIComponent(summoner);
-            // if (summonerName) {
-            //     const response = await searchForSummoner(summonerName);
-            //     setSummonerFound(response);
-            //     router.push({
-            //         pathname: '/' + summonerName
-            //     })
-            // }
-
             const summonerName = encodeURIComponent(summoner);
             if (summonerName) {
-                const response = await searchForSummoner2(summonerName);
-                console.log(response)
+                const response = await searchForSummoner(summonerName);
                 if (response) {
                     router.push({ 
                         pathname: '/' + summonerName    
